@@ -1,0 +1,1139 @@
+@import "tailwindcss";
+
+/* ---------- Design tokens (see docs/design-plan.md) ----------
+   Six colours, three type families. Components never write a raw hex or a
+   raw font stack; they use these variables or the type-role classes below. */
+:root {
+  --paper: #fbfaf7;
+  --ink: #14120f;
+  --ink-muted: #6b6459;
+  --rule: #e2dcd1;
+  --wash: #f3efe7;
+  --accent: #a6231c;
+
+  --wrap: 74rem;
+  --gutter: 1.25rem;
+  --measure: 38rem;
+
+  --size-wordmark: clamp(2.75rem, 7.5vw, 5rem);
+  --size-lead: clamp(2.25rem, 5.2vw, 4.25rem);
+  --size-article: clamp(2rem, 4.4vw, 3.5rem);
+  --size-page: clamp(1.875rem, 3.6vw, 2.75rem);
+  --size-secondary: 1.4375rem;
+  --size-list: 1.1875rem;
+  --size-section: 1.25rem;
+  --size-dek: 1.0625rem;
+  --size-body: 1.1875rem;
+  --size-meta: 0.8125rem;
+  --size-kicker: 0.75rem;
+
+  --reveal-duration: 480ms;
+}
+
+@media (min-width: 48rem) {
+  :root {
+    --gutter: 2rem;
+  }
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-muted: var(--ink-muted);
+  --color-rule: var(--rule);
+  --color-wash: var(--wash);
+  --color-accent: var(--accent);
+  --font-display: var(--ff-display), Georgia, "Times New Roman", serif;
+  --font-sans: var(--ff-sans), "Helvetica Neue", Arial, sans-serif;
+  --font-serif: var(--ff-serif), Georgia, "Times New Roman", serif;
+}
+
+/* ---------- Base ---------- */
+html {
+  color-scheme: light;
+  background: var(--paper);
+}
+
+/* Jumping to a contents entry glides rather than teleports, unless the
+   reader has asked for less motion. */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Headlines are links but must not look like body links. */
+h1 a,
+h2 a,
+h3 a,
+h4 a {
+  text-decoration: none;
+}
+
+h1 a:hover,
+h2 a:hover,
+h3 a:hover,
+h4 a:hover {
+  color: var(--accent);
+}
+
+a:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.14em;
+  text-decoration-thickness: from-font;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-variation-settings: "opsz" 60, "WONK" 1, "SOFT" 0;
+  letter-spacing: -0.011em;
+  text-wrap: balance;
+}
+
+p {
+  margin: 0;
+}
+
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+time {
+  font-variant-numeric: tabular-nums;
+}
+
+.wrap {
+  max-width: var(--wrap);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* Grids default to minmax(auto, 1fr); a sized image would then hold a track
+   open past the viewport. Every layout grid here uses a zero minimum. */
+.front,
+.archive,
+.article,
+.lead,
+.lead-text,
+.secondaries,
+.secondary-text,
+.section-block,
+.section-block-body,
+.section-lead,
+.sections-grid,
+.archive-header,
+.article-header,
+.article-footer,
+.row-text,
+.story-row-main,
+.author-card-text,
+.footer-grid {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.skip-link {
+  position: absolute;
+  left: var(--gutter);
+  top: -100%;
+  z-index: 10;
+  padding: 0.5rem 0.75rem;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: var(--size-meta);
+}
+
+.skip-link:focus {
+  top: 0.5rem;
+}
+
+main:focus {
+  outline: none;
+}
+
+/* ---------- Type roles ---------- */
+.wordmark {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-size: var(--size-wordmark);
+  font-weight: 700;
+  font-variation-settings: "opsz" 144, "WONK" 1, "SOFT" 0;
+  line-height: 0.95;
+  letter-spacing: -0.025em;
+}
+
+.wordmark:hover {
+  text-decoration: none;
+  color: var(--accent);
+}
+
+.headline-lead {
+  font-size: var(--size-lead);
+  font-weight: 700;
+  line-height: 1.03;
+  letter-spacing: -0.018em;
+  font-variation-settings: "opsz" 110, "WONK" 1, "SOFT" 0;
+}
+
+.headline-article {
+  font-size: var(--size-article);
+  font-weight: 700;
+  line-height: 1.06;
+  letter-spacing: -0.016em;
+  font-variation-settings: "opsz" 96, "WONK" 1, "SOFT" 0;
+  max-width: 20ch;
+}
+
+.headline-page {
+  font-size: var(--size-page);
+  font-weight: 700;
+  line-height: 1.08;
+  font-variation-settings: "opsz" 72, "WONK" 1, "SOFT" 0;
+}
+
+.headline-secondary {
+  font-size: var(--size-secondary);
+  line-height: 1.16;
+  font-variation-settings: "opsz" 36, "WONK" 1, "SOFT" 0;
+}
+
+.headline-list {
+  font-size: var(--size-list);
+  line-height: 1.25;
+  font-variation-settings: "opsz" 24, "WONK" 0, "SOFT" 0;
+  text-wrap: pretty;
+}
+
+.section-heading {
+  font-size: var(--size-section);
+  line-height: 1.1;
+  font-variation-settings: "opsz" 30, "WONK" 0, "SOFT" 0;
+}
+
+/* Kickers name the section and nothing else: they carry information, so they
+   are allowed the small-caps treatment that a decorative eyebrow is not. */
+.kicker {
+  font-family: var(--font-sans);
+  font-size: var(--size-kicker);
+  font-weight: 600;
+  letter-spacing: 0.085em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  line-height: 1.3;
+}
+
+.kicker-accent,
+.kicker-accent a {
+  color: var(--accent);
+}
+
+.section-heading a,
+.kicker a,
+.kicker span,
+.main-nav a,
+.sections-nav a,
+.footer-grid a,
+.tag-list a {
+  display: inline-block;
+}
+
+/* WCAG 2.2 target size: small text links need a hit area of at least 24px,
+   which padding provides without changing where the text sits. */
+.kicker a,
+.meta a,
+.footer-grid a,
+.utility-inner a {
+  padding-block: 0.3rem;
+}
+
+.byline .meta a,
+.byline-author {
+  padding-block: 0.25rem;
+}
+
+.dek {
+  font-family: var(--font-serif);
+  font-size: var(--size-dek);
+  line-height: 1.5;
+  color: color-mix(in srgb, var(--ink) 82%, var(--paper));
+  max-width: var(--measure);
+}
+
+.dek-clamp {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  overflow: hidden;
+}
+
+.meta {
+  font-family: var(--font-sans);
+  font-size: var(--size-meta);
+  font-weight: 500;
+  color: var(--ink-muted);
+  line-height: 1.35;
+}
+
+.meta a {
+  color: var(--ink);
+}
+
+.byline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.3rem 0.9rem;
+}
+
+.byline > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.byline-author {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.prose {
+  font-family: var(--font-serif);
+  font-size: var(--size-body);
+  line-height: 1.6;
+  max-width: var(--measure);
+}
+
+.prose a,
+.link {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 0.14em;
+}
+
+/* ---------- Masthead ---------- */
+.utility-bar {
+  border-bottom: 1px solid var(--rule);
+}
+
+.utility-inner {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block: 0.55rem;
+  font-family: var(--font-sans);
+  font-size: var(--size-kicker);
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.utility-end a:hover {
+  color: var(--accent);
+}
+
+.masthead-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1.5rem;
+  padding-block: 1.5rem 1.25rem;
+}
+
+.search-pill {
+  font-size: var(--size-meta);
+  font-weight: 600;
+  padding: 0.45rem 1rem;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.search-pill:hover {
+  text-decoration: none;
+  border-color: var(--ink);
+}
+
+.main-nav {
+  border-top: 1px solid var(--ink);
+}
+
+.main-nav ul,
+.sections-nav ul {
+  display: flex;
+  overflow-x: auto;
+  white-space: nowrap;
+  scrollbar-width: none;
+}
+
+.main-nav ul::-webkit-scrollbar,
+.sections-nav ul::-webkit-scrollbar {
+  display: none;
+}
+
+.main-nav ul {
+  gap: 1.75rem;
+  padding-block: 0.7rem;
+}
+
+.main-nav a {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  padding-block: 0.15rem;
+}
+
+.main-nav a:hover,
+.sections-nav a:hover {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+/* Sections sit in a second, quieter row: a wash band with pill links, so the
+   page names above read as the primary navigation. */
+.sections-nav {
+  background: var(--wash);
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+
+.sections-inner {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding-block: 0.5rem;
+}
+
+.sections-label {
+  flex-shrink: 0;
+  font-family: var(--font-sans);
+  font-size: var(--size-kicker);
+  font-weight: 600;
+  letter-spacing: 0.085em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.sections-nav ul {
+  gap: 0.4rem;
+  /* Room for the pill outline, which the scroll box would otherwise clip. */
+  padding: 2px;
+  margin: -2px;
+}
+
+.sections-nav a {
+  font-size: var(--size-meta);
+  font-weight: 500;
+  padding: 0.3rem 0.8rem;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  background: var(--paper);
+  transition:
+    border-color 150ms ease,
+    color 150ms ease;
+}
+
+.sections-nav a:hover {
+  border-color: var(--ink);
+}
+
+.main-nav a:first-letter,
+.sections-nav a:first-letter {
+  text-transform: uppercase;
+}
+
+/* ---------- Front page ---------- */
+.front {
+  padding-block: 2.5rem 3.5rem;
+  display: grid;
+  gap: 2.75rem;
+}
+
+.lead {
+  display: grid;
+  gap: 1.5rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+.lead-text {
+  display: grid;
+  gap: 1rem;
+  align-content: start;
+}
+
+.lead-figure {
+  margin: 0;
+  grid-row: 1;
+}
+
+/* With no image the lead is pure typography, so the headline is given room
+   to be the largest thing on the page rather than looking like a gap. */
+.lead.no-image .headline-lead {
+  max-width: 20ch;
+}
+
+.lead.no-image .dek {
+  font-size: 1.1875rem;
+  max-width: 34rem;
+}
+
+@media (min-width: 48rem) {
+  .lead {
+    grid-template-columns: 7fr 5fr;
+    gap: 2.5rem;
+    align-items: start;
+  }
+
+  .lead-figure {
+    justify-self: end;
+  }
+
+  .lead-text {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .lead-figure {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .lead.no-image {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* The one deliberate motion moment: the lead image reveal. */
+@keyframes reveal {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+.lead-figure img {
+  animation: reveal var(--reveal-duration) cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lead-figure img {
+    animation: none;
+  }
+}
+
+.secondaries {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.secondaries > * + * {
+  border-top: 1px solid var(--rule);
+  padding-top: 1.5rem;
+}
+
+@media (min-width: 48rem) {
+  .secondaries {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2rem;
+  }
+
+  /* Vertical hairlines separate the columns. Drawn in the gutter with a
+     pseudo-element rather than as a border plus padding on the item, which
+     would leave the first column wider than the rest. */
+  .secondaries {
+    gap: 2.5rem;
+  }
+
+  .secondaries > * + * {
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  .secondaries > * + * {
+    position: relative;
+  }
+
+  .secondaries > * + *::before {
+    content: "";
+    position: absolute;
+    left: -1.25rem;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--rule);
+  }
+}
+
+.secondary {
+  display: grid;
+  grid-template-columns: 6rem minmax(0, 1fr);
+  gap: 1rem;
+  align-items: start;
+  /* Cards are stretched to the tallest in the row; without this the spare
+     height is shared between the rows and the shorter card's text drifts
+     down, so the kickers no longer line up. */
+  align-content: start;
+}
+
+.secondary.no-image {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.secondary-text {
+  display: grid;
+  gap: 0.5rem;
+}
+
+/* Cards crop to a common shape, so a row lines up whatever aspect ratios the
+   editor uploaded. Width is capped at the image's natural size by WpImage, so
+   this crops but never upscales. */
+.secondary-figure img,
+.section-lead figure img,
+.row-figure img {
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+}
+
+@media (min-width: 48rem) {
+  .secondary {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .secondary-figure {
+    order: -1;
+    margin-bottom: 0.25rem;
+  }
+}
+
+.block-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid var(--ink);
+}
+
+.block-heading .meta a {
+  color: var(--accent);
+}
+
+.story-list > li + li {
+  border-top: 1px solid var(--rule);
+}
+
+.story-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.25rem 1.5rem;
+  align-items: baseline;
+  padding-block: 0.85rem;
+}
+
+.story-row-main {
+  display: grid;
+  gap: 0.3rem;
+}
+
+.section-block {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.section-block-body {
+  display: grid;
+  gap: 1.25rem;
+}
+
+@media (min-width: 48rem) {
+  .section-block-body {
+    grid-template-columns: 5fr 7fr;
+    gap: 2.5rem;
+  }
+}
+
+.section-lead {
+  display: grid;
+  gap: 0.6rem;
+  align-content: start;
+}
+
+.section-lead figure {
+  margin: 0 0 0.35rem;
+}
+
+.sections-grid {
+  display: grid;
+  gap: 2.75rem;
+}
+
+/* ---------- Archives (section, topic, author, latest, search) ---------- */
+.archive {
+  padding-block: 2rem 3.5rem;
+  display: grid;
+  gap: 1.75rem;
+}
+
+.archive-header {
+  display: grid;
+  gap: 0.6rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--ink);
+}
+
+.archive-list > li + li {
+  border-top: 1px solid var(--rule);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 6rem minmax(0, 1fr);
+  gap: 1.25rem;
+  padding-block: 1.5rem;
+  align-items: start;
+}
+
+.row.no-image {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.row-text {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.row-figure {
+  margin: 0;
+}
+
+/* Beside a 96px thumbnail there is no room for a dek; it returns at tablet width. */
+.row .dek {
+  display: none;
+}
+
+@media (min-width: 48rem) {
+  .row {
+    grid-template-columns: 12.5rem minmax(0, 1fr);
+    gap: 1.75rem;
+  }
+
+  .row .dek {
+    display: block;
+  }
+}
+
+.empty {
+  font-family: var(--font-serif);
+  font-size: var(--size-dek);
+  line-height: 1.55;
+  max-width: var(--measure);
+}
+
+.pagination {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 1rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--ink);
+}
+
+.pagination a {
+  font-weight: 600;
+}
+
+.pagination a:hover {
+  color: var(--accent);
+}
+
+.pagination > :last-child {
+  text-align: right;
+}
+
+.search-form {
+  display: flex;
+  gap: 0.5rem;
+  max-width: 32rem;
+}
+
+.search-form input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+  font: inherit;
+  font-size: 1rem;
+}
+
+.search-form input::placeholder {
+  color: var(--ink-muted);
+}
+
+.search-form button,
+.button {
+  padding: 0.6rem 1.1rem;
+  border: 1px solid var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ---------- Article ---------- */
+.article {
+  padding-block: 2rem 3.5rem;
+  display: grid;
+  gap: 1.75rem;
+}
+
+.article-header {
+  display: grid;
+  gap: 1rem;
+}
+
+.article-header .dek {
+  font-size: 1.25rem;
+  line-height: 1.45;
+}
+
+.avatar {
+  border-radius: 50%;
+  flex: none;
+}
+
+.dateline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1.25rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--rule);
+}
+
+.article-figure {
+  margin: 0;
+  display: grid;
+  gap: 0.5rem;
+  max-width: 48rem;
+}
+
+/* ---------- Article layout and table of contents ----------
+   Block on small screens, so the mobile contents bar can stick for the whole
+   length of the body; two columns from 1024px, where the contents sit in a
+   sticky rail beside the text. */
+.article-layout {
+  display: block;
+}
+
+.toc-desktop {
+  display: none;
+}
+
+.toc-heading {
+  font-family: var(--font-sans);
+  font-size: var(--size-kicker);
+  font-weight: 600;
+  letter-spacing: 0.085em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  margin-bottom: 0.75rem;
+}
+
+.toc-list {
+  display: grid;
+  gap: 0.1rem;
+  border-left: 1px solid var(--rule);
+}
+
+.toc-list a {
+  display: block;
+  padding: 0.35rem 0 0.35rem 0.85rem;
+  margin-left: -1px;
+  border-left: 2px solid transparent;
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  line-height: 1.3;
+  color: var(--ink-muted);
+}
+
+.toc-list a:hover {
+  color: var(--ink);
+  text-decoration: none;
+}
+
+/* The rail marks where you are: position, which is information. */
+.toc-list a[aria-current="location"] {
+  color: var(--ink);
+  font-weight: 600;
+  border-left-color: var(--accent);
+}
+
+.toc-sub a {
+  padding-left: 1.65rem;
+  font-size: 0.8125rem;
+}
+
+/* Mobile: a sticky bar that opens. Native <details>, so it works without JS. */
+.toc-mobile {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--paper);
+  border-block: 1px solid var(--rule);
+  margin-bottom: 1.75rem;
+}
+
+.toc-mobile summary {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  padding-block: 0.7rem;
+  padding-right: 1.5rem;
+  cursor: pointer;
+  list-style: none;
+  position: relative;
+}
+
+.toc-mobile summary::-webkit-details-marker {
+  display: none;
+}
+
+.toc-mobile summary::after {
+  content: "";
+  position: absolute;
+  right: 0.25rem;
+  top: 50%;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-right: 1.5px solid var(--ink-muted);
+  border-bottom: 1.5px solid var(--ink-muted);
+  transform: translateY(-70%) rotate(45deg);
+}
+
+.toc-mobile[open] summary::after {
+  transform: translateY(-30%) rotate(-135deg);
+}
+
+.toc-label {
+  font-family: var(--font-sans);
+  font-size: var(--size-kicker);
+  font-weight: 600;
+  letter-spacing: 0.085em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  flex: none;
+}
+
+.toc-current {
+  font-family: var(--font-sans);
+  font-size: var(--size-meta);
+  color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.toc-mobile[open] .toc-current {
+  display: none;
+}
+
+.toc-mobile nav {
+  max-height: 50vh;
+  overflow-y: auto;
+  padding-bottom: 0.85rem;
+}
+
+@media (min-width: 64rem) {
+  .article-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 15rem;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .article-main {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .toc-mobile {
+    display: none;
+  }
+
+  .toc-desktop {
+    display: block;
+    grid-column: 2;
+    grid-row: 1;
+    position: sticky;
+    top: 2rem;
+    max-height: calc(100vh - 4rem);
+    overflow-y: auto;
+  }
+}
+
+.caption {
+  font-family: var(--font-sans);
+  font-size: var(--size-meta);
+  color: var(--ink-muted);
+  line-height: 1.45;
+}
+
+.caption .credit {
+  color: var(--ink);
+}
+
+.article-footer {
+  display: grid;
+  gap: 2.25rem;
+  max-width: 48rem;
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tag-list a {
+  font-family: var(--font-sans);
+  font-size: var(--size-meta);
+  font-weight: 600;
+  padding: 0.3rem 0.7rem;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+}
+
+.tag-list a:hover {
+  text-decoration: none;
+  border-color: var(--ink);
+}
+
+.tag-list a:first-letter {
+  text-transform: uppercase;
+}
+
+.author-card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 1.25rem;
+  padding: 1.5rem;
+  background: var(--wash);
+  align-items: start;
+}
+
+.author-card-text {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.author-card.no-avatar {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.author-header {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.author-header.no-avatar {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* ---------- Footer ---------- */
+.site-footer {
+  margin-top: 2rem;
+  border-top: 1px solid var(--ink);
+  padding-block: 2rem 3rem;
+}
+
+.footer-grid {
+  display: grid;
+  gap: 1.75rem;
+}
+
+@media (min-width: 48rem) {
+  .footer-grid {
+    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  }
+}
+
+.footer-heading {
+  font-family: var(--font-sans);
+  font-size: var(--size-kicker);
+  font-weight: 600;
+  letter-spacing: 0.085em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  margin-bottom: 0.6rem;
+}
+
+.footer-grid li {
+  padding-block: 0.05rem;
+}
+
+.footer-grid a:hover {
+  color: var(--accent);
+}
+
+.footer-grid a:first-letter {
+  text-transform: uppercase;
+}
+
+.footer-colophon {
+  margin-top: 2.25rem;
+}
+
+/* ---------- Notices ---------- */
+.notice {
+  padding-block: 3.5rem 4.5rem;
+  display: grid;
+  gap: 1.25rem;
+  max-width: var(--measure);
+}

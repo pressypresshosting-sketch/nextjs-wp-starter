@@ -1,0 +1,30 @@
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+next-env.d.ts
+
+# Every env file is private. `.env.example` is the only one that ships, and
+# `.env.development` / `.env.test` are named in the docs, so ignore the whole
+# family rather than listing variants one by one.
+.env
+.env.*
+!.env.example
+
+# Credentials and keys, in case one is ever dropped in the project folder.
+*.pem
+*.key
+*.ppk
+id_rsa*
+id_ed25519*
+*.p12
+.netrc
+
+# Written by `npm run deploy` from .env; holds the revalidate secret.
+wordpress/mu-plugins/pressy-headless-config.php
+
+.DS_Store
+Thumbs.db
+npm-debug.log*
+yarn-error.log*
+lighthouse/
