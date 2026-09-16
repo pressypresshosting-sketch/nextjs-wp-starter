@@ -60,8 +60,8 @@ if (!dotEnv && !dotProd) fail("No .env found.", "Copy .env.example to .env and f
 if (dotEnv) ok(".env found");
 if (dotProd) {
   info(".env.production found: it ships to the server as is and overrides .env at build time");
-  const leaked = [...dotProd.keys()].filter((key) => key.startsWith("PRESSY_"));
-  if (leaked.length) fail(`.env.production contains ${leaked.join(", ")}.`, "That file is uploaded. Deploy settings belong in .env only.");
+  const leaked = [...dotProd.keys()].filter((key) => key.startsWith("PRESSY_") || key.startsWith("WORKFLOW_"));
+  if (leaked.length) fail(`.env.production contains ${leaked.join(", ")}.`, "That file is uploaded. Deploy and workflow settings belong in .env only.");
 }
 
 /** What the build and the server see: .env.production wins, .env fills the gaps. */

@@ -53,15 +53,16 @@ fi
 SSH_CMD="ssh ${SSH_OPTS[*]}"
 
 # What ships to the server. A hand-written .env.production wins and is uploaded
-# as is; otherwise every non-PRESSY_ line of .env is: the app's own values and
-# none of the deploy credentials. Same merge rule as `next build`.
+# as is; otherwise every line of .env that is not PRESSY_ or WORKFLOW_ is: the
+# app's own values, none of the deploy credentials and none of the prompt-
+# workflow settings. Same merge rule as `next build`.
 [ -f .env ] || [ -f .env.production ] || { echo "ERROR: no .env found. Copy .env.example to .env and fill it in." >&2; exit 1; }
-if [ -f .env.production ] && grep -qE '^[[:space:]]*PRESSY_' .env.production; then
-  echo "ERROR: .env.production contains PRESSY_* lines. It is uploaded verbatim; deploy settings belong in .env only." >&2; exit 1
+if [ -f .env.production ] && grep -qE '^[[:space:]]*(PRESSY_|WORKFLOW_)' .env.production; then
+  echo "ERROR: .env.production contains PRESSY_* or WORKFLOW_* lines. It is uploaded verbatim; those belong in .env only." >&2; exit 1
 fi
 ship_env() {
   { [ -f .env.production ] && grep -E '^[A-Za-z_][A-Za-z0-9_]*=' .env.production; [ -f .env ] && grep -E '^[A-Za-z_][A-Za-z0-9_]*=' .env; true; } \
-    | grep -vE '^PRESSY_' | awk -F= '!seen[$1]++'
+    | grep -vE '^(PRESSY_|WORKFLOW_)' | awk -F= '!seen[$1]++'
 }
 env_value() { ship_env | grep -E "^$1=" | head -1 | cut -d= -f2- | sed -E "s/^(['\"])(.*)\1$/\2/"; }
 SITE_URL="$(env_value NEXT_PUBLIC_SITE_URL | sed 's#/$##')"

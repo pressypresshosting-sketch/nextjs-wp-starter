@@ -90,7 +90,7 @@ Delete `.next/cache` before building if WordPress content changed. Next.js keeps
 
 `AGENTS.md` lists the architecture, the rules that must hold, and the non-obvious decisions. Point your agent at it.
 
-To build a site from first principles instead of reproducing this starter's exact content model, routes, design and hosting, use the staged prompts in [`docs/prompt-workflow.md`](docs/prompt-workflow.md). They begin by inspecting the real WordPress installation, record the decisions for that site, and finish with deployment and release verification.
+To build a site from first principles instead of reproducing this starter's exact content model, routes, design and hosting, use the four staged prompts in [`docs/prompt-workflow.md`](docs/prompt-workflow.md). They begin by inspecting the real WordPress installation, record the decisions for that site, and finish with deployment and release verification. [`docs/WORKFLOW-RULES.md`](docs/WORKFLOW-RULES.md) holds the standing rules those prompts rely on.
 
 ## Licence
 
