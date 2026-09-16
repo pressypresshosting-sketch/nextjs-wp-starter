@@ -9,6 +9,8 @@
     "postbuild": "node scripts/prepare-standalone.mjs",
     "start": "node .next/standalone/server.js",
     "lint": "eslint . --max-warnings 0",
+    "check:scripts": "node --check scripts/deploy.mjs && node --check scripts/inspect-wp.mjs && node --check scripts/preflight.mjs && node --check scripts/prepare-standalone.mjs && node --check scripts/standalone-entry.cjs && bash -n scripts/deploy.sh && bash -n scripts/ssh-askpass.sh",
+    "check": "npm run typecheck && npm run lint && npm run check:scripts",
     "typecheck": "tsc --noEmit",
     "inspect": "node scripts/inspect-wp.mjs",
     "preflight": "node scripts/preflight.mjs",
